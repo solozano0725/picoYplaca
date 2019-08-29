@@ -42,7 +42,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         for (Map.Entry<String, Integer> e : hashMap.entrySet()) {
             itemHolder.txtDay.setText(e.getKey());
             itemHolder.txtNumberDay.setText(e.getValue());
-            Log.e("JODAESTA", e.getKey()+", "+e.getValue());
         }
     }
 

@@ -62,41 +62,28 @@ public class AppDbHelper implements ModelContract.IModel{
     public void getPeakAndPlate() {
         try {
             if(hashMapPP == null){
-                Log.d("PASO1", "PASO1");
                 dbW.beginTransaction();
                 hashMapPP = new HashMap<>();
                 Cursor cursor = dbW.rawQuery("SELECT * FROM "+CommonConstants.PP_TABLE_NAME, null);
                 boolean hasRecord = cursor.moveToFirst();
-                Log.d("PASO2", "PASO2");
                 if (cursor.moveToFirst()) {
                     Log.d("PASO3", cursor.getCount()+"");
-                    Log.d("PASO3", "PASO3");
                     do {
-                        Log.d("PASO4", "PASO4");
-                        Log.i("Cursor", cursor.getString(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_DAY)));
-                        Log.i("Cursor", cursor.getInt(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_NUMBER))+"");
-                        hashMapPP.put(
-                                cursor.getString(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_DAY)),
+                        hashMapPP.put(cursor.getString(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_DAY)),
                                 cursor.getInt(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_NUMBER)));
 
                     } while (cursor.moveToNext());
                     cursor.close();
                 }
-                Log.d("PASO6", "PASO6");
                 dbW.setTransactionSuccessful();
-                Log.d("PASO7", "PASO7");
-                dbW.endTransaction();
+
             }
         } catch (Exception e) {
-            Log.d("PASO8", "PASO8");
             Log.d("Error", e.getMessage());
         } finally {
-
-
-            Log.d("PASO9", "PASO9");
+            dbW.endTransaction();
             dbW.close();
             instanceDB.close();
-            Log.d("PASO10", "PASO10");
         }
     }
 
