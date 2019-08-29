@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Pico y Placa</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="days">
+        <item name="monday">Lunes</item>
+        <item name="tuesday">Martes</item>
+        <item name="wednesday">Miercoles</item>
+        <item name="thursday">Jueves</item>
+        <item name="friday">Viernes</item>
+    </string-array>
+    <string-array name="plateNumber">
+        <item name="one">1</item>
+        <item name="two">2</item>
+        <item name="three">3</item>
+        <item name="four">4</item>
+        <item name="five">5</item>
+        <item name="six">6</item>
+        <item name="seven">7</item>
+        <item name="eight">8</item>
+        <item name="nine">9</item>
+        <item name="zero">0</item>
+    </string-array>
+    <string name="time_default">00:00</string>
+    <string name="day">Dias</string>
+    <string name="hours_peakplate">Franja Horaria</string>
+    <string name="getpeakandplate">¡Conoce tu Pico y Placa!</string>
+</resources>
