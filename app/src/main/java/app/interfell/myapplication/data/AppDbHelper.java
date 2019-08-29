@@ -21,12 +21,9 @@ public class AppDbHelper implements ModelContract.IModel{
     private static AppDbHelper sInstance;
 
     public static synchronized AppDbHelper getInstance(Context context) {
-        Log.d("PASO11", "PASO1");
         if (sInstance == null) {
-            Log.d("PASO12", "PASO1");
             sInstance = new AppDbHelper(context.getApplicationContext());
         }
-        Log.d("PASO13", "PASO1");
         return sInstance;
     }
 
@@ -67,7 +64,6 @@ public class AppDbHelper implements ModelContract.IModel{
                 Cursor cursor = dbW.rawQuery("SELECT * FROM "+CommonConstants.PP_TABLE_NAME, null);
                 boolean hasRecord = cursor.moveToFirst();
                 if (cursor.moveToFirst()) {
-                    Log.d("PASO3", cursor.getCount()+"");
                     do {
                         hashMapPP.put(cursor.getString(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_DAY)),
                                 cursor.getInt(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_NUMBER)));
