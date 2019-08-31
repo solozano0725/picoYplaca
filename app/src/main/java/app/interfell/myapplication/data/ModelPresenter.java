@@ -4,17 +4,20 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import app.interfell.myapplication.R;
 import app.interfell.myapplication.data.db.model.HistoryModel;
 import app.interfell.myapplication.data.db.model.PeakAndPlateModel;
+import app.interfell.myapplication.ui.history.HistoryContract;
 import app.interfell.myapplication.utils.Utils;
 
-public class ModelPresenter implements ModelContract.ModelPresenter{
+public class ModelPresenter implements ModelContract.ModelPresenter, HistoryContract.HistoryPresenter {
 
     private ModelContract.ModelView modelView;
     private ModelContract.IModel iModel;
+    private HistoryContract.HModel hModel;
 
-    public ModelPresenter(ModelContract.ModelView m) {
-        this.modelView = m;
+    public ModelPresenter(Object m) {
+        this.modelView = (ModelContract.ModelView) m;
         iModel = new AppDbHelper(modelView);
     }
 
@@ -35,7 +38,38 @@ public class ModelPresenter implements ModelContract.ModelPresenter{
 
     @Override
     public void setHistory(HistoryModel m) {
+       hModel.
+    }
 
+    @Override
+    public void setHistory(int i) {
+        switch (i) {
+            case 1:
+                setInfo(getResources().getString(R.string.case_1),
+                        R.color.errorColor,
+                        getResources().getString(R.string.part_1) + "\n"
+                                + getResources().getString(R.string.part_2) + "\n"
+                                + getResources().getString(R.string.part_3) + "\n"
+                                + getResources().getString(R.string.part_4));
+                break;
+            case 2:
+                setInfo(getResources().getString(R.string.case_2),
+                        R.color.errorColor,
+                        getResources().getString(R.string.part_1) + "\n"
+                                + getResources().getString(R.string.part_2) + "\n"
+                                + getResources().getString(R.string.part_3) + "\n"
+                                + getResources().getString(R.string.part_4));
+                break;
+            case 3:
+                setInfo(getResources().getString(R.string.case_3),
+                        R.color.successColor,
+                        getResources().getString(R.string.part_1) + "\n"
+                                + getResources().getString(R.string.part_22) + "\n"
+                                + getResources().getString(R.string.part_3) + "\n"
+                                + getResources().getString(R.string.part_4));
+                break;
+            default:
+        }
     }
 
     private static boolean validateHour(String hour){
@@ -69,6 +103,5 @@ public class ModelPresenter implements ModelContract.ModelPresenter{
         }
         return a;
     }
-
 
 }

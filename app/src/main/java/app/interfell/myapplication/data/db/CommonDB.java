@@ -10,7 +10,6 @@ public class CommonDB {
     public static final String HISTORY_TABLE_NAME = "HISTORY_PEAKANDPLATE";
     public static final String HISTORY_TABLE_NAME_COLUMN_ID = "ID";
     public static final String HISTORY_TABLE_NAME_COLUMN_DATE = "DATE";
-    public static final String HISTORY_TABLE_NAME_COLUMN_HOUR = "HOUR";
     public static final String HISTORY_TABLE_NAME_COLUMN_IN = "DATA_IN";
     public static final String HISTORY_TABLE_NAME_COLUMN_OUT = "DATA_OUT";
 
@@ -21,13 +20,14 @@ public class CommonDB {
     public static final String CREATE_TABLE_HISTORY = "CREATE TABLE IF NOT EXISTS "+HISTORY_TABLE_NAME+
             " ("+HISTORY_TABLE_NAME_COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             +HISTORY_TABLE_NAME_COLUMN_DATE+" TEXT, "
-            +HISTORY_TABLE_NAME_COLUMN_HOUR+" TEXT, "
             +HISTORY_TABLE_NAME_COLUMN_IN+" TEXT, "
             +HISTORY_TABLE_NAME_COLUMN_OUT+" TEXT "+")";
 
     public static final String DROP_TABLE_PP = "DROP TABLE IF EXISTS "+PP_TABLE_NAME;
     public static final String DROP_TABLE_HISTORY = "DROP TABLE IF EXISTS "+HISTORY_TABLE_NAME;
+
     public static final String SELECT_ALL_PP = "SELECT * FROM " + PP_TABLE_NAME;
+    public static final String SELECT_ALL_HH = "SELECT * FROM " + HISTORY_TABLE_NAME;
 
     public static final String INSERT_1 = "INSERT INTO " + PP_TABLE_NAME + " ("
             + PP_TABLE_NAME_COLUMN_DAY + ", " + PP_TABLE_NAME_COLUMN_ID + ") Values ('Lunes', 1)";

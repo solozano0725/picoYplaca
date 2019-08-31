@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         btnCalendar.setOnClickListener(v -> pullCalendarHour());
         btnGo.setOnClickListener(v -> {
             modelPresenter.isPeakAndPlate(getData());
+            modelPresenter.setHistory(getDataQuery(getData()));
             adapterRV.notifyDataSetChanged();
         });
     }
