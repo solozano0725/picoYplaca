@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         btnCalendar.setOnClickListener(v -> pullCalendarHour());
         btnGo.setOnClickListener(v -> {
             modelPresenter.isPeakAndPlate(getData());
-            modelPresenter.setHistory(getDataQuery(getData()));
+         //   modelPresenter.setHistory(getDataQuery(getData()));
             adapterRV.notifyDataSetChanged();
         });
     }
@@ -174,9 +174,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     }
 
     public HistoryModel getDataQuery(PeakAndPlateModel p){
-        HistoryModel h = new HistoryModel();
-        h.setDATE(Utils.getDateTimeSystem());
-        h.setDATA_IN(p.toString());
+       HistoryModel h = new HistoryModel();
+       /*  h.setDATE(Utils.getDateTimeSystem());
+        h.setDATA_IN(p.toString());*/
         return h;
     }
 

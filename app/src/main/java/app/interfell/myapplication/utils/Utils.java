@@ -24,11 +24,11 @@ public class Utils {
         return String.valueOf(hour);
     }
 
-    public static String getDateTimeSystem(){
+/*    public static String getDateTimeSystem(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         return dateFormat.format(cal);
-    }
+    }*/
 
 
 }

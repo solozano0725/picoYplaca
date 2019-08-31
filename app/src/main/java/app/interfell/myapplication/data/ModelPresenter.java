@@ -38,38 +38,7 @@ public class ModelPresenter implements ModelContract.ModelPresenter, HistoryCont
 
     @Override
     public void setHistory(HistoryModel m) {
-       hModel.
-    }
 
-    @Override
-    public void setHistory(int i) {
-        switch (i) {
-            case 1:
-                setInfo(getResources().getString(R.string.case_1),
-                        R.color.errorColor,
-                        getResources().getString(R.string.part_1) + "\n"
-                                + getResources().getString(R.string.part_2) + "\n"
-                                + getResources().getString(R.string.part_3) + "\n"
-                                + getResources().getString(R.string.part_4));
-                break;
-            case 2:
-                setInfo(getResources().getString(R.string.case_2),
-                        R.color.errorColor,
-                        getResources().getString(R.string.part_1) + "\n"
-                                + getResources().getString(R.string.part_2) + "\n"
-                                + getResources().getString(R.string.part_3) + "\n"
-                                + getResources().getString(R.string.part_4));
-                break;
-            case 3:
-                setInfo(getResources().getString(R.string.case_3),
-                        R.color.successColor,
-                        getResources().getString(R.string.part_1) + "\n"
-                                + getResources().getString(R.string.part_22) + "\n"
-                                + getResources().getString(R.string.part_3) + "\n"
-                                + getResources().getString(R.string.part_4));
-                break;
-            default:
-        }
     }
 
     private static boolean validateHour(String hour){
@@ -104,4 +73,8 @@ public class ModelPresenter implements ModelContract.ModelPresenter, HistoryCont
         return a;
     }
 
+    @Override
+    public void setDataToRecyclerView() {
+
+    }
 }
