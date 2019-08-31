@@ -16,6 +16,7 @@ public interface MainContract {
         void successMsg(String message);
         void errorMsg(String message);
         void warningMsg(String message);
+
     }
 
     interface MainPresenter{

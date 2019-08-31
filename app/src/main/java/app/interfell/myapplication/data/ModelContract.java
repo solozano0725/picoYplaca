@@ -1,24 +1,26 @@
 package app.interfell.myapplication.data;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import app.interfell.myapplication.data.db.model.HistoryModel;
-import app.interfell.myapplication.ui.recyclerview.RecyclerViewAdapter;
+import app.interfell.myapplication.data.db.model.PeakAndPlateModel;
 
 public interface ModelContract {
 
     interface ModelView{
-        void setDataToRecyclerView(RecyclerViewAdapter adapterRV);
+        void setDataToRecyclerView(LinkedHashMap<Integer, String> hashMapPP);
+        PeakAndPlateModel getData();
+        void setPeakAndPlate(int cass);
+        HistoryModel getDataQuery(PeakAndPlateModel p);
     }
 
     interface ModelPresenter{
-        RecyclerViewAdapter setDataToRecyclerView(RecyclerViewAdapter adapterRV);
+        void isPeakAndPlate(PeakAndPlateModel peakAndPlateModel);
+        void setHistory(HistoryModel m);
     }
 
     interface IModel{
-        void insertHistory(HistoryModel historyModel);
-        void getPeakAndPlate();
-        HashMap<String, Integer> getHashMap();
+        LinkedHashMap<Integer, String> getHashMap();
     }
 
 }

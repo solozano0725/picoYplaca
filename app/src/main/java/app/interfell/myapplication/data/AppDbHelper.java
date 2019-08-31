@@ -1,51 +1,44 @@
 package app.interfell.myapplication.data;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
-import java.util.HashMap;
-
+import java.util.LinkedHashMap;
 import app.interfell.myapplication.data.db.DbOpenHelper;
-import app.interfell.myapplication.data.db.model.HistoryModel;
-import app.interfell.myapplication.utils.CommonConstants;
+import app.interfell.myapplication.data.db.CommonDB;
 
 public class AppDbHelper implements ModelContract.IModel{
 
-    public static DbOpenHelper instanceDB = null;
-    public static SQLiteDatabase dbW, dbR;
-    private static HashMap<String, Integer> hashMapPP;
+    public static DbOpenHelper db = null;
+    private static LinkedHashMap<Integer, String> hashMapPP;
 
     private static AppDbHelper sInstance;
-
+    private SQLiteDatabase sqlDB;
+/*
     public static synchronized AppDbHelper getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new AppDbHelper(context.getApplicationContext());
         }
         return sInstance;
     }
-
-    public AppDbHelper(Context c) {
-        instanceDB = DbOpenHelper.getInstance(c);
-        dbR = instanceDB.getReadableDatabase();
-        dbW = instanceDB.getWritableDatabase();
-        instanceDB.onCreate(dbW);
-        //getPeakAndPlate();
+*/
+    public AppDbHelper(ModelContract.ModelView mainView) {
+        db = DbOpenHelper.getInstance((Context) mainView);
+        //db = DbOpenHelper.getInstance(c);
     }
 
-    @Override
+   /*  @Override
     public void insertHistory(HistoryModel historyModel) {
-        dbW.beginTransaction();
+      dbW.beginTransaction();
         try {
             ContentValues values = new ContentValues();
-            values.put(CommonConstants.HISTORY_TABLE_NAME_COLUMN_DATE, historyModel.getDATE());
-            values.put(CommonConstants.HISTORY_TABLE_NAME_COLUMN_HOUR, historyModel.getHOUR());
-            values.put(CommonConstants.HISTORY_TABLE_NAME_COLUMN_IN, historyModel.getDATA_IN());
-            values.put(CommonConstants.HISTORY_TABLE_NAME_COLUMN_OUT, historyModel.getDATA_OUT());
+            values.put(CommonDB.HISTORY_TABLE_NAME_COLUMN_DATE, historyModel.getDATE());
+            values.put(CommonDB.HISTORY_TABLE_NAME_COLUMN_HOUR, historyModel.getHOUR());
+            values.put(CommonDB.HISTORY_TABLE_NAME_COLUMN_IN, historyModel.getDATA_IN());
+            values.put(CommonDB.HISTORY_TABLE_NAME_COLUMN_OUT, historyModel.getDATA_OUT());
 
-            dbW.insertOrThrow(CommonConstants.HISTORY_TABLE_NAME, null, values);
+            dbW.insertOrThrow(CommonDB.HISTORY_TABLE_NAME, null, values);
             dbW.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d("Error", e.getMessage());
@@ -53,38 +46,31 @@ public class AppDbHelper implements ModelContract.IModel{
             dbW.endTransaction();
             instanceDB.close();
         }
-    }
+    }*/
 
-    @Override
-    public void getPeakAndPlate() {
+    private void getPeakAndPlate() {
         try {
-            if(hashMapPP == null){
-                dbW.beginTransaction();
-                hashMapPP = new HashMap<>();
-                Cursor cursor = dbW.rawQuery("SELECT * FROM "+CommonConstants.PP_TABLE_NAME, null);
-                boolean hasRecord = cursor.moveToFirst();
-                if (cursor.moveToFirst()) {
-                    do {
-                        hashMapPP.put(cursor.getString(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_DAY)),
-                                cursor.getInt(cursor.getColumnIndex(CommonConstants.PP_TABLE_NAME_COLUMN_NUMBER)));
-
-                    } while (cursor.moveToNext());
-                    cursor.close();
+            sqlDB = db.getReadableDatabase();
+            if (hashMapPP == null) {
+                hashMapPP = new LinkedHashMap<>();
+                Cursor cursor = sqlDB.rawQuery(CommonDB.SELECT_ALL_PP, null);
+                while (cursor.moveToNext()) {
+                    hashMapPP.put(cursor.getInt(cursor.getColumnIndex(CommonDB.PP_TABLE_NAME_COLUMN_ID)),
+                            cursor.getString(cursor.getColumnIndex(CommonDB.PP_TABLE_NAME_COLUMN_DAY)));
                 }
-                dbW.setTransactionSuccessful();
-
+                cursor.close();
             }
         } catch (Exception e) {
             Log.d("Error", e.getMessage());
         } finally {
-            dbW.endTransaction();
-            dbW.close();
-            instanceDB.close();
+            sqlDB.close();
+            db.close();
         }
     }
 
     @Override
-    public HashMap<String, Integer> getHashMap() {
+    public LinkedHashMap<Integer, String> getHashMap() {
+        getPeakAndPlate();
         return hashMapPP;
     }
 

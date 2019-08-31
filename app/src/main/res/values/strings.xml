@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">Pico y Placa</string>
     <string name="action_settings">Settings</string>
+    <string name="time_default">00:00</string>
+    <string name="day">Dias</string>
+    <string name="hours_peakplate">Franja Horaria</string>
+    <string name="getpeakandplate">¡Conoce tu Pico y Placa!</string>
+    <string name="part_1">De acuerdo a la normativa,</string>
+    <string name="part_2">el vehículo no podrá circular en la ciudad el dia indicado en la parte inferior</string>
+
+    <string name="part_22">el vehículo podrá circular en la ciudad, excepto el dia indicado en la parte inferior</string>
+    <string name="part_3">desde las 07:00 hasta las 09:30 y en la tarde desde las 16:00 hasta las 19:30.</string>
+    <string name="part_4">Fuera de este horario, el vehículo puede circular sin problemas dentro de la ciudad</string>
+    <string name="case_1">SI HAY CONTRAVERSION POR DIA, FECHA Y HORA.</string>
+    <string name="case_2">SI HAY CONTRAVERSION POR DIA Y FECHA.</string>
+    <string name="case_3">NO HAY CONTRAVERSION.</string>
+
+    <string name="bicatora">Bitacora</string>
+
     <string-array name="days">
         <item name="monday">Lunes</item>
         <item name="tuesday">Martes</item>
@@ -8,6 +24,8 @@
         <item name="thursday">Jueves</item>
         <item name="friday">Viernes</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="plateNumber">
         <item name="one">1</item>
         <item name="two">2</item>
@@ -20,8 +38,6 @@
         <item name="nine">9</item>
         <item name="zero">0</item>
     </string-array>
-    <string name="time_default">00:00</string>
-    <string name="day">Dias</string>
-    <string name="hours_peakplate">Franja Horaria</string>
-    <string name="getpeakandplate">¡Conoce tu Pico y Placa!</string>
+
+
 </resources>

@@ -10,38 +10,39 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import app.interfell.myapplication.R;
+import app.interfell.myapplication.data.db.model.PeakAndPlateModel;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-    private HashMap<String, Integer> hashMap;
-    private Context context;
+    private LinkedHashMap<Integer, String> hashMap;
 
-    public RecyclerViewAdapter(Context c) {
-        this.context = c;
-        hashMap = new HashMap<>();
+    public RecyclerViewAdapter(LinkedHashMap<Integer, String> hm) {
+        this.hashMap = hm;
     }
 
-    public void add(HashMap<String, Integer> i) {
-        hashMap.putAll(i);
-        notifyDataSetChanged();
-    }
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ViewHolder itemHolder = (ViewHolder) holder;
-        for (Map.Entry<String, Integer> e : hashMap.entrySet()) {
-            itemHolder.txtDay.setText(e.getKey());
-            itemHolder.txtNumberDay.setText(e.getValue());
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        int i = 0;
+        for (Map.Entry<Integer, String> e : hashMap.entrySet()) {
+            if(position == i){
+                holder.txtDay.setText(e.getValue());
+                holder.txtNumberDay.setText(e.getKey().toString());
+                break;
+            }
+            i++;
         }
     }
 
@@ -50,9 +51,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return hashMap.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return getItemCount();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView txtDay, txtNumberDay;
+        public TextView txtDay, txtNumberDay;
 
         public ViewHolder(View view) {
             super(view);

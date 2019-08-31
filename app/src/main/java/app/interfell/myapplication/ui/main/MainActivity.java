@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,13 +25,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import app.interfell.myapplication.R;
 import app.interfell.myapplication.data.ModelContract;
 import app.interfell.myapplication.data.ModelPresenter;
+import app.interfell.myapplication.data.db.model.HistoryModel;
+import app.interfell.myapplication.data.db.model.PeakAndPlateModel;
+import app.interfell.myapplication.ui.history.HistoryFragment;
 import app.interfell.myapplication.ui.recyclerview.RecyclerViewAdapter;
+import app.interfell.myapplication.utils.Utils;
 import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity implements MainContract.MainView,
@@ -49,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     private MainPresenter mainPresenter;
     private ModelPresenter modelPresenter;
     private TimePickerDialog timePickerDialog;
-    private TextView txtHour;
-
+    private TextView txtHour, txtNews, txtContra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,51 +65,38 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initializeView();
         mainPresenter = new MainPresenter(this);
-        modelPresenter = new ModelPresenter(this,this);
+        modelPresenter = new ModelPresenter(this);
+
+        initializeView();
 
         pullSpinnerDay();
         pullSpinnerDayNumber();
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> getSupportFragmentManager().beginTransaction()
+                .add(R.id.layoutP, new HistoryFragment())
+                .addToBackStack(null)
+                .commit());
 
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pullCalendarHour();
-            }
-        });
-        btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDataToRecyclerView(adapterRV);
-            }
+        btnCalendar.setOnClickListener(v -> pullCalendarHour());
+        btnGo.setOnClickListener(v -> {
+            modelPresenter.isPeakAndPlate(getData());
+            adapterRV.notifyDataSetChanged();
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -114,15 +107,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     private void initializeView(){
         spinnerDay = findViewById(R.id.spinnerDay);
         spinnerNumberDay= findViewById(R.id.spinnerNumber);
+        txtHour = findViewById(R.id.txtHour);
+        txtNews = findViewById(R.id.txtNews);
+        txtContra = findViewById(R.id.txtContra);
         btnCalendar= findViewById(R.id.calendarHour);
         btnGo= findViewById(R.id.btnGo);
-        txtHour = findViewById(R.id.txtHour);
 
         rv = findViewById(R.id.rv);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(RecyclerView.VERTICAL);
         rv.setLayoutManager(mLayoutManager);
-        adapterRV = new RecyclerViewAdapter(getApplicationContext());
     }
 
     @Override
@@ -143,7 +137,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        txtHour.setText(hourOfDay+":"+minute);
+        txtHour.setText(Utils.setFormatHour(hourOfDay)+":"+Utils.setFormatHour(minute));
+        txtHour.invalidate();
+        txtHour.requestLayout();
     }
 
     @Override
@@ -162,8 +158,68 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     }
 
     @Override
-    public void setDataToRecyclerView(RecyclerViewAdapter adapterRV) {
-        adapterRV = modelPresenter.setDataToRecyclerView(adapterRV);
+    public void setDataToRecyclerView(LinkedHashMap<Integer, String> hashMapPP) {
+        adapterRV = new RecyclerViewAdapter(hashMapPP);
         rv.setAdapter(adapterRV);
     }
+
+    @Override
+    public PeakAndPlateModel getData() {
+        PeakAndPlateModel p = new PeakAndPlateModel();
+        p.setDAY(spinnerDay.getSelectedItem().toString());
+        p.setNUMBER_DAY(Integer.parseInt(spinnerNumberDay.getSelectedItem().toString()));
+        p.setHOUR(txtHour.getText().toString());
+        return p;
+    }
+
+    public HistoryModel getDataQuery(PeakAndPlateModel p){
+        HistoryModel h = new HistoryModel();
+        h.setDATE(Utils.getDateTimeSystem());
+        h.setDATA_IN(p.toString());
+        return h;
+    }
+
+    @Override
+    public void setPeakAndPlate(int cass) {
+        switch (cass) {
+            case 1:
+                setInfo(getResources().getString(R.string.case_1),
+                        R.color.errorColor,
+                        getResources().getString(R.string.part_1) + "\n"
+                                + getResources().getString(R.string.part_2) + "\n"
+                                + getResources().getString(R.string.part_3) + "\n"
+                                + getResources().getString(R.string.part_4));
+                break;
+            case 2:
+                setInfo(getResources().getString(R.string.case_2),
+                        R.color.errorColor,
+                        getResources().getString(R.string.part_1) + "\n"
+                                + getResources().getString(R.string.part_2) + "\n"
+                                + getResources().getString(R.string.part_3) + "\n"
+                                + getResources().getString(R.string.part_4));
+                break;
+            case 3:
+                setInfo(getResources().getString(R.string.case_3),
+                        R.color.successColor,
+                        getResources().getString(R.string.part_1) + "\n"
+                                + getResources().getString(R.string.part_22) + "\n"
+                                + getResources().getString(R.string.part_3) + "\n"
+                                + getResources().getString(R.string.part_4));
+                break;
+            default:
+        }
+    }
+
+    private void setInfo(String title, int color, String message){
+        txtContra.setText(title);
+        txtContra.setTextColor(getResources().getColor(color));
+        txtNews.setText(message);
+
+        txtContra.invalidate();
+        txtContra.requestLayout();
+
+        txtNews.invalidate();
+        txtNews.requestLayout();
+    }
+
 }
